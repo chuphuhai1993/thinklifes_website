@@ -5,9 +5,11 @@ const repoName = 'thinklifes_website' // Tên repository của bạn
 
 const nextConfig: NextConfig = {
   /* config options here */
-  output: 'export', // Enable static export
-  basePath: isProd ? `/${repoName}` : '',
-  assetPrefix: isProd ? `/${repoName}/` : '',
+  ...(isProd && {
+    output: 'export',
+    basePath: `/${repoName}`,
+    assetPrefix: `/${repoName}/`,
+  }),
   trailingSlash: true,
   images: {
     unoptimized: true,
