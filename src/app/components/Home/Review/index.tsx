@@ -1,34 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ReviewType } from '@/app/types/review'
+import { ReviewData } from '@/app/data/siteData'
 import Image from 'next/image'
 import { Icon } from '@iconify/react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import ReviewSkeleton from '../../Skeleton/Review'
 
 const Review = () => {
-  const [review, setReview] = useState<ReviewType[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setReview(data.ReviewData)
-      } catch (error) {
-        console.error('Error fetching service', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [])
-
   const settings = {
     dots: true,
     arrows: false,
@@ -100,44 +79,40 @@ const Review = () => {
         </div>
         {/* slider */}
         <Slider {...settings}>
-          {loading
-            ? Array.from({ length: 3 }).map((_, i) => (
-                <ReviewSkeleton key={i} />
-              ))
-            : review.map((item, i) => (
-                <div key={i}>
-                  <div className='m-3 p-6 bg-white dark:bg-lightdarkblue rounded-lg'>
-                    <div className='flex items-center gap-4 mb-5'>
-                      <div className='relative'>
-                        <Image
-                          src={item.imgSrc}
-                          alt={item.name}
-                          width={48}
-                          height={48}
-                          className='rounded-full'
-                        />
-                        <div className='absolute bottom-0 right-0'>
-                          <Image
-                            src={'/images/banner/greentick.svg'}
-                            alt='tick'
-                            width={15}
-                            height={15}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <h6>{item.name}</h6>
-                        <div>
-                          {renderStars(item.rating)} {/* Dynamic stars */}
-                        </div>
-                      </div>
+          {ReviewData.map((item, i) => (
+            <div key={i}>
+              <div className='m-3 p-6 bg-white dark:bg-lightdarkblue rounded-lg'>
+                <div className='flex items-center gap-4 mb-5'>
+                  <div className='relative'>
+                    <Image
+                      src={item.imgSrc}
+                      alt={item.name}
+                      width={48}
+                      height={48}
+                      className='rounded-full'
+                    />
+                    <div className='absolute bottom-0 right-0'>
+                      <Image
+                        src={'/images/banner/greentick.svg'}
+                        alt='tick'
+                        width={15}
+                        height={15}
+                      />
                     </div>
+                  </div>
+                  <div>
+                    <h6>{item.name}</h6>
                     <div>
-                      <p className='text-base font-normal'>{item.desc}</p>
+                      {renderStars(item.rating)} {/* Dynamic stars */}
                     </div>
                   </div>
                 </div>
-              ))}
+                <div>
+                  <p className='text-base font-normal'>{item.desc}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </Slider>
       </div>
     </section>

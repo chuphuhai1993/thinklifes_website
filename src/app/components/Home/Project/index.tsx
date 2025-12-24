@@ -4,30 +4,9 @@ import Image from 'next/image'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { useEffect, useState } from 'react'
-import { ProjectType } from '@/app/types/project'
-import ProjectSkeleton from '../../Skeleton/Project'
+import { ProjectData } from '@/app/data/siteData'
 
 const Project = () => {
-  const [project, setProject] = useState<ProjectType[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setProject(data.ProjectData)
-      } catch (error) {
-        console.error('Error fetching service', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [])
-
   const settings = {
     dots: true,
     arrows: false,
@@ -81,37 +60,33 @@ const Project = () => {
           {/* slider */}
           <div className='relative z-20'>
             <Slider {...settings}>
-              {loading
-                ? Array.from({ length: 4 }).map((_, i) => (
-                  <ProjectSkeleton key={i} />
-                ))
-                : project.map((item, i) => (
-                  <div key={i}>
-                    <div className='p-5 bg-white dark:bg-lightdarkblue m-3 rounded-lg'>
-                      <div className='w-full mb-4'>
-                        <Image
-                          src={item.coverImg}
-                          alt={item.coverImg}
-                          width={234}
-                          height={236}
-                          className='w-full rounded-lg'
-                        />
-                      </div>
-                      <div className='flex items-center gap-2'>
-                        <Image
-                          src={'/images/project/get-nextjs-logo.svg'}
-                          alt={'logo'}
-                          width={31}
-                          height={31}
-                          className='rounded-full'
-                        />
-                        <p className='text-base font-medium text-darkblue dark:text-white'>
-                          {item.name}
-                        </p>
-                      </div>
+              {ProjectData.map((item, i) => (
+                <div key={i}>
+                  <div className='p-5 bg-white dark:bg-lightdarkblue m-3 rounded-lg'>
+                    <div className='w-full mb-4'>
+                      <Image
+                        src={item.coverImg}
+                        alt={item.coverImg}
+                        width={234}
+                        height={236}
+                        className='w-full rounded-lg'
+                      />
+                    </div>
+                    <div className='flex items-center gap-2'>
+                      <Image
+                        src={'/images/project/get-nextjs-logo.svg'}
+                        alt={'logo'}
+                        width={31}
+                        height={31}
+                        className='rounded-full'
+                      />
+                      <p className='text-base font-medium text-darkblue dark:text-white'>
+                        {item.name}
+                      </p>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
             </Slider>
           </div>
           {/* floating images */}

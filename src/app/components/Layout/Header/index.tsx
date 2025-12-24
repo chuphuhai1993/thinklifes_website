@@ -4,12 +4,11 @@ import { useEffect, useRef, useState } from 'react'
 import Logo from './Logo'
 import HeaderLink from './Navigation/HeaderLink'
 import MobileHeaderLink from './Navigation/MobileHeaderLink'
-import { NavLinkType } from '@/app/types/navlink'
 import { Icon } from '@iconify/react'
 import { useTheme } from 'next-themes'
+import { NavLinkData } from '@/app/data/siteData'
 
 const Header: React.FC = () => {
-  const [navlink, setNavlink] = useState<NavLinkType[]>([])
   const { theme, setTheme } = useTheme()
   const [navbarOpen, setNavbarOpen] = useState(false)
   const [sticky, setSticky] = useState(false)
@@ -18,21 +17,6 @@ const Header: React.FC = () => {
   const signInRef = useRef<HTMLDivElement>(null)
   const signUpRef = useRef<HTMLDivElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
-
-  //   fetchData
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setNavlink(data.NavLinkData)
-      } catch (error) {
-        console.error('Error fetching service', error)
-      }
-    }
-    fetchData()
-  }, [])
 
   const handleScroll = () => {
     setSticky(window.scrollY >= 80)
@@ -87,7 +71,7 @@ const Header: React.FC = () => {
         <Logo />
         <nav>
           <ul className='hidden xl:flex flex-grow items-center justify-start gap-10 '>
-            {navlink.map((item, index) => (
+            {NavLinkData.map((item, index) => (
               <HeaderLink key={index} item={item} />
             ))}
           </ul>
@@ -155,7 +139,7 @@ const Header: React.FC = () => {
           </button>
         </div>
         <nav className='flex flex-col items-start p-4'>
-          {navlink.map((item, index) => (
+          {NavLinkData.map((item, index) => (
             <MobileHeaderLink key={index} item={item} />
           ))}
           <div className='mt-4 flex flex-col gap-4 w-full'>

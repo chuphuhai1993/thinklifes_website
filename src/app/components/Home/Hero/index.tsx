@@ -1,34 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { HeroType } from '@/app/types/hero'
-import HeroSkeleton from '../../Skeleton/Hero'
 import Link from 'next/link'
+import { HeroData } from '@/app/data/siteData'
 
 const Hero = () => {
-  const [heroimg, setHeroimg] = useState<HeroType[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/data')
-        if (!res.ok) throw new Error('Failed to fetch')
-        const data = await res.json()
-        setHeroimg(data.HeroData)
-      } catch (error) {
-        console.error('Error fetching service', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [])
-
   const settings = {
     dots: true,
     arrows: false,
